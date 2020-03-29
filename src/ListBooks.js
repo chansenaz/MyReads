@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
-//import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 class ListBooks extends Component {
   render() {
+    const { books } = this.props
+    console.log(books)
+
     return (
       <div className="list-books">
         <div className="list-books-title">
@@ -160,7 +163,9 @@ class ListBooks extends Component {
           </div>
         </div>
         <div className="open-search">
-          <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
+          <Link to='/addbook'>
+            <button>Add Book</button>
+          </Link>
         </div>
       </div>
     )
