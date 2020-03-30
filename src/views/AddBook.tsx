@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class AddBook extends Component {
   render() {
@@ -7,7 +7,7 @@ class AddBook extends Component {
       <div className="search-books">
         <div className="search-books-bar">
           <Link to='/'>
-          <button className="close-search">Close</button>
+            <button className="close-search">Close</button>
           </Link>
           <div className="search-books-input-wrapper">
             {/*

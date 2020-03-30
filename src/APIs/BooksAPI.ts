@@ -1,4 +1,4 @@
-import { IBook, Shelf } from "../data/IBook"
+import { IBook, Shelf } from "../data/IBook";
 
 const api = "https://reactnd-books-api.udacity.com"
 

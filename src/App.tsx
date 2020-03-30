@@ -1,8 +1,8 @@
 import React from 'react'
 import * as BooksAPI from './APIs/BooksAPI'
-import './App.css'
+import './css/App.css'
 import AddBook from './views/AddBook'
-import ListBooks from './views/ListBooks'
+import BookList from './views/BookList'
 import { Route } from 'react-router-dom'
 import { IBook, Shelf } from './data/IBook'
 
@@ -52,14 +52,16 @@ export default class App extends React.Component<any, IAppState> {
   render() {
     return (
       <div className="app">
-        <Route exact path='/' render={() => <ListBooks
-          books={this.state.books}
-        />}
+        <Route exact path='/' render={() => (
+          <BookList
+            currentlyReadingBooks={this.state.currentlyReadingBooks}
+            wantToReadBooks={this.state.wantToReadBooks}
+            readBooks={this.state.readBooks}
+          />
+        )}
         />
-
         <Route path='/addbook' render={({ history }) => (
           <AddBook
-
           />
         )} />
       </div>
