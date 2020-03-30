@@ -1,11 +1,17 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { IBook } from '../data/IBook'
 
-class ListBooks extends Component {
+export interface IListBooksProps {
+  books: IBook[];
+}
+
+//inside the angle brackets, first argument is props type, second is state type
+class ListBooks extends Component<IListBooksProps> {
   render() {
     const { books } = this.props
     console.log(books)
-
+    
     return (
       <div className="list-books">
         <div className="list-books-title">

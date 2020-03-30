@@ -7,7 +7,7 @@ class AddBook extends Component {
       <div className="search-books">
         <div className="search-books-bar">
           <Link to='/'>
-            <button className="close-search">Close</button>
+          <button className="close-search">Close</button>
           </Link>
           <div className="search-books-input-wrapper">
             {/*
