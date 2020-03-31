@@ -17,9 +17,11 @@ class AddBook extends Component<any, IAddBookState> {
   async searchBooks(query: string) {
     if (query.length > 0) {
       let searchedBooks = await BooksAPI.search(query);
-      this.setState({
-        searchedBooks
-      });
+      if (searchedBooks.length > 0) {
+        this.setState({ searchedBooks });
+      } else {
+        this.setState({ searchedBooks: [] });
+      }
     } else {
       this.setState({
         searchedBooks: []
