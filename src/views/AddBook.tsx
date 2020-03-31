@@ -1,7 +1,32 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { IBook } from '../data/IBook';
+import Book from './Book';
+import * as BooksAPI from '../APIs/BooksAPI'
 
-class AddBook extends Component {
+export interface IAddBookState {
+  searchedBooks: IBook[]
+}
+
+class AddBook extends Component<any, IAddBookState> {
+  //when do I need to put this in a constructor?
+  state = {
+    searchedBooks: []
+  }
+
+  async searchBooks(query: string) {
+    if (query.length > 0) {
+      let searchedBooks = await BooksAPI.search(query);
+      this.setState({
+        searchedBooks
+      });
+    } else {
+      this.setState({
+        searchedBooks: []
+      })
+    }
+  }
+
   render() {
     return (
       <div className="search-books">
@@ -18,12 +43,20 @@ class AddBook extends Component {
             However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
             you don't find a specific author or title. Every search is limited by search terms.
           */}
-            <input type="text" placeholder="Search by title or author" />
-
+            <input type="text"
+              placeholder="Search by title or author"
+              onChange={(event: any) => this.searchBooks(event.target.value)}
+            />
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid"></ol>
+          <ol className="books-grid">
+            {this.state.searchedBooks.map((book) => (
+              <li>
+                <Book book={book} />
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
     )

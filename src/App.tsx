@@ -7,7 +7,7 @@ import { Route } from 'react-router-dom'
 import { IBook, Shelf } from './data/IBook'
 
 export interface IAppState {
-  books: IBook[];
+  shelvedBooks: IBook[];
   readBooks: IBook[];
   wantToReadBooks: IBook[];
   currentlyReadingBooks: IBook[];
@@ -15,7 +15,7 @@ export interface IAppState {
 
 export default class App extends React.Component<any, IAppState> {
   state: IAppState = {
-    books: [],
+    shelvedBooks: [],
     readBooks: [],
     wantToReadBooks: [],
     currentlyReadingBooks: []
@@ -35,18 +35,19 @@ export default class App extends React.Component<any, IAppState> {
 
   //semi-colons aren't required, but good to do for readability
   async componentDidMount() {
-    let books = await BooksAPI.getAll();
-    let readBooks = books.filter(book => book.shelf === Shelf.Read);
-    let wantToReadBooks = books.filter(book => book.shelf === Shelf.WantToRead);
-    let currentlyReadingBooks = books.filter(book => book.shelf === Shelf.CurrentlyReading);
+    let shelvedBooks = await BooksAPI.getAll();
+    let readBooks = shelvedBooks.filter(book => book.shelf === Shelf.Read);
+    let wantToReadBooks = shelvedBooks.filter(book => book.shelf === Shelf.WantToRead);
+    let currentlyReadingBooks = shelvedBooks.filter(book => book.shelf === Shelf.CurrentlyReading);
+
     this.setState({
       //shorthand for books: books etc., only works if they're the same name
-      books, readBooks, wantToReadBooks, currentlyReadingBooks
+      shelvedBooks, readBooks, wantToReadBooks, currentlyReadingBooks
     });
   }
 
-  addBook = (book: IBook) => {
-
+  async moveBook(book: IBook, shelf: Shelf) {
+    await BooksAPI.update(book, shelf);
   }
 
   render() {
@@ -61,8 +62,7 @@ export default class App extends React.Component<any, IAppState> {
         )}
         />
         <Route path='/addbook' render={({ history }) => (
-          <AddBook
-          />
+          <AddBook/>
         )} />
       </div>
     )

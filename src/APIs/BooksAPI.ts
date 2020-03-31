@@ -13,10 +13,17 @@ const headers = {
 }
 
 //you can async await instead of .then
+/*
 export const get = (bookId: string): Promise<IBook> =>
   fetch(`${api}/books/${bookId}`, { headers })
     .then(res => res.json())
     .then(data => data.book)
+*/
+export async function get(bookId: string): Promise<IBook> {
+  let res = await fetch(`${api}/books/${bookId}`, { headers });
+  let data = await res.json();
+  return data.book;
+}
 
 /*
 export const getAll = () =>
@@ -24,7 +31,6 @@ export const getAll = () =>
     .then(res => res.json())
     .then(data => data.books)
 */
-
 //it looks like we're returning books, but we're actually returning a promise that returns books
 //we know that because any function marked async returns a promise
 export async function getAll(): Promise<IBook[]> {
@@ -33,6 +39,7 @@ export async function getAll(): Promise<IBook[]> {
   return data.books;
 }
 
+/*
 export const update = (book: IBook, shelf: Shelf) =>
   fetch(`${api}/books/${book.id}`, {
     method: 'PUT',
@@ -42,7 +49,19 @@ export const update = (book: IBook, shelf: Shelf) =>
     },
     body: JSON.stringify({ shelf })
   }).then(res => res.json())
+*/
+export async function update(book: IBook, shelf: Shelf) {
+  let res = await fetch(`${api}/books/${book.id}`, {
+    method: 'PUT',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ shelf })
+  });
+}
 
+/*
 export const search = (query: any) =>
   fetch(`${api}/search`, {
     method: 'POST',
@@ -53,3 +72,16 @@ export const search = (query: any) =>
     body: JSON.stringify({ query })
   }).then(res => res.json())
     .then(data => data.books)
+*/
+export async function search(query: string): Promise<IBook[]> {
+  let res = await fetch(`${api}/search`, {
+    method: 'POST',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ query })
+  });
+  let data = await res.json();
+  return data.books;
+}
