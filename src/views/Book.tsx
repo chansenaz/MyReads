@@ -37,8 +37,8 @@ export default class Book extends Component<IBookProps> {
         </div>
         <div className="book-title">{book.title}</div>
         <div className="book-authors">
-          {book.authors.join(', ')}
-      </div>
+          {book.authors ? book.authors.join(', ') : 'Unknown Author'}
+        </div>
       </div>
     )
   }
