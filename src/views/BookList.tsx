@@ -12,7 +12,7 @@ export interface IBookListProps {
 //inside the angle brackets, first argument is props type, second is state type
 export default class BookList extends Component<IBookListProps> {
   render() {
-    const { currentlyReadingBooks, readBooks, wantToReadBooks } = this.props
+    const { currentlyReadingBooks, wantToReadBooks, readBooks } = this.props
 
     return (
       <div className="list-books">
@@ -22,8 +22,8 @@ export default class BookList extends Component<IBookListProps> {
         <div className="list-books-content">
           <div>
             <Bookshelf books={currentlyReadingBooks} title="Currently Reading" />
-            <Bookshelf books={readBooks} title="Want to Read" />
-            <Bookshelf books={wantToReadBooks} title="Read" />
+            <Bookshelf books={wantToReadBooks} title="Want to Read" />
+            <Bookshelf books={readBooks} title="Read" />
           </div>
         </div>
 
