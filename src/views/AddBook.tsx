@@ -46,7 +46,7 @@ class AddBook extends Component<any, IAddBookState> {
             you don't find a specific author or title. Every search is limited by search terms.
           */}
             <input type="text"
-              placeholder="Search by title or author"
+              placeholder="Search by keyword"
               onChange={(event: any) => this.searchBooks(event.target.value)}
             />
           </div>
