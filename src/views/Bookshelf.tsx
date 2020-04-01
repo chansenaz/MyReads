@@ -18,7 +18,7 @@ export default class Bookshelf extends Component<IBookshelfProps> {
         <div className="bookshelf-books">
           <ol className="books-grid">
             {books.map((book) => (
-              <li>
+              <li key={book.id}>
                 <Book book={book} />
               </li>
             ))}
