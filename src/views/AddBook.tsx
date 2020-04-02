@@ -2,34 +2,17 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { IBook } from '../data/IBook';
 import Book from './Book';
-import * as BooksAPI from '../APIs/BooksAPI'
 
-export interface IAddBookState {
+export interface IAddBookProps {
   searchedBooks: IBook[]
+  searchBooks(query: string): void
 }
 
-class AddBook extends Component<any, IAddBookState> {
-  //when do I need to put this in a constructor?
-  state = {
-    searchedBooks: []
-  }
-
-  async searchBooks(query: string) {
-    if (query.length > 0) {
-      let searchedBooks = await BooksAPI.search(query);
-      if (searchedBooks.length > 0) {
-        this.setState({ searchedBooks });
-      } else {
-        this.setState({ searchedBooks: [] });
-      }
-    } else {
-      this.setState({
-        searchedBooks: []
-      })
-    }
-  }
-
+class AddBook extends Component<IAddBookProps> {
   render() {
+    //this line de-structures props (takes 'this' out of the old context)
+    const { searchedBooks, searchBooks } = this.props
+
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -37,24 +20,16 @@ class AddBook extends Component<any, IAddBookState> {
             <button className="close-search">Close</button>
           </Link>
           <div className="search-books-input-wrapper">
-            {/*
-            NOTES: The search from BooksAPI is limited to a particular set of search terms.
-            You can find these search terms here:
-            https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-            However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-            you don't find a specific author or title. Every search is limited by search terms.
-          */}
             <input type="text"
               placeholder="Search by keyword"
-              onChange={(event: any) => this.searchBooks(event.target.value)}
+              onChange={(event: any) => searchBooks(event.target.value)}
             />
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.state.searchedBooks.map((book) => (
-              <li>
+            {searchedBooks.map((book: IBook) => (
+              <li key={book.id}>
                 <Book book={book} />
               </li>
             ))}

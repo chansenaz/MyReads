@@ -11,6 +11,7 @@ export interface IAppState {
   readBooks: IBook[];
   wantToReadBooks: IBook[];
   currentlyReadingBooks: IBook[];
+  searchedBooks: IBook[];
 }
 
 export default class App extends React.Component<any, IAppState> {
@@ -18,32 +19,58 @@ export default class App extends React.Component<any, IAppState> {
     shelvedBooks: [],
     readBooks: [],
     wantToReadBooks: [],
-    currentlyReadingBooks: []
+    currentlyReadingBooks: [],
+    searchedBooks: []
   }
-
-  //runs after the component mounts
-  //.then is equivalent to await
-  /*
-  componentDidMount() {
-    BooksAPI.getAll()
-      .then((books) => {
-        this.setState(() => ({
-          books
-        }))
-      })
-  }*/
 
   //semi-colons aren't required, but good to do for readability
   async componentDidMount() {
     let shelvedBooks = await BooksAPI.getAll();
-    let readBooks = shelvedBooks.filter(book => book.shelf === Shelf.Read);
-    let wantToReadBooks = shelvedBooks.filter(book => book.shelf === Shelf.WantToRead);
     let currentlyReadingBooks = shelvedBooks.filter(book => book.shelf === Shelf.CurrentlyReading);
-
+    let wantToReadBooks = shelvedBooks.filter(book => book.shelf === Shelf.WantToRead);
+    let readBooks = shelvedBooks.filter(book => book.shelf === Shelf.Read);
+    
+    console.log(this);
     this.setState({
-      //shorthand for books: books etc., only works if they're the same name
+      //shorthand for shelvedBooks: shelvedBooks etc., only works if they're the same name
       shelvedBooks, readBooks, wantToReadBooks, currentlyReadingBooks
     });
+  }
+
+
+  //Alternatively, searchBooks should maybe go in AddBook since it's not used in any other components?
+
+  //this is a regular method definition. with method definitions, the 'this' is not forced to be anything
+  //the method is defined in the prototype object
+  //the prototype is an object that is how javascript does its inheritence
+  //Object has a prototype
+  //the object that extends object has a prototype
+  //you start at the lowest child and work your way up until it's defined
+  //if we use this method, we need to bind 'this' when we pass this function in the props
+  //the question is which way is more memory efficient
+  async searchBooks(query: string) {
+
+  //this is a lambda function. 'this' is pinned and not maleable in lambda functions
+  //here the method is defined in the instance, so every single instance is going to have this function
+  //(remember that functions are objects)
+  //searchBooks = async (query: string) => {
+    if (query.length > 0) {
+      let searchedBooks = await BooksAPI.search(query);
+
+      if (searchedBooks.length > 0) {
+        this.setState({ 
+          searchedBooks 
+        });
+      } else {
+        this.setState({ 
+          searchedBooks: [] 
+        });
+      }
+    } else {
+      this.setState({
+        searchedBooks: []
+      })
+    }
   }
 
   async moveBook(book: IBook, shelf: Shelf) {
@@ -62,7 +89,10 @@ export default class App extends React.Component<any, IAppState> {
         )}
         />
         <Route path='/addbook' render={({ history }) => (
-          <AddBook/>
+          <AddBook
+            searchedBooks={this.state.searchedBooks}
+            searchBooks={this.searchBooks.bind(this)}
+          />
         )} />
       </div>
     )
