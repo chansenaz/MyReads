@@ -13,6 +13,7 @@ This app is the first of three projects completed for [Udacity's React Nanodegre
 ### Technologies Used
 
 * React
+* TypeScript
 * [Create React App](https://create-react-app.dev/)
 * API Integration with Udacity Server
 
