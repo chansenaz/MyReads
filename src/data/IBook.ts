@@ -28,5 +28,6 @@ export interface IBook {
 export enum Shelf {
     CurrentlyReading = "currentlyReading",
     WantToRead = "wantToRead",
-    Read = "read"
+    Read = "read",
+    None = "none"
 }

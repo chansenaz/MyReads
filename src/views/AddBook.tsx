@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { IBook } from '../data/IBook';
+import { IBook, Shelf } from '../data/IBook';
 import Book from './Book';
 
 export interface IAddBookProps {
   searchedBooks: IBook[]
   searchBooks(query: string): void
+  moveBook(book: IBook, shelf: Shelf): void
 }
 
-class AddBook extends Component<IAddBookProps> {
+export default class AddBook extends Component<IAddBookProps> {
   render() {
     //this line de-structures props (takes 'this' out of the old context)
-    const { searchedBooks, searchBooks } = this.props
+    const { searchedBooks, searchBooks, moveBook } = this.props
 
     return (
       <div className="search-books">
@@ -30,7 +31,7 @@ class AddBook extends Component<IAddBookProps> {
           <ol className="books-grid">
             {searchedBooks.map((book: IBook) => (
               <li key={book.id}>
-                <Book book={book} />
+                <Book book={book} moveBook={moveBook} />
               </li>
             ))}
           </ol>
@@ -39,5 +40,3 @@ class AddBook extends Component<IAddBookProps> {
     )
   }
 }
-
-export default AddBook;

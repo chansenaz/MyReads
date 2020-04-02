@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { IBook } from '../data/IBook';
+import { IBook, Shelf } from '../data/IBook';
 import Book from './Book';
 
 export interface IBookshelfProps {
   books: IBook[];
   title: string;
+  moveBook(book: IBook, shelf: Shelf): void;
 }
 
 //inside the angle brackets, first argument is props type, second is state type
 export default class Bookshelf extends Component<IBookshelfProps> {
   render() {
-    const { books, title } = this.props;
+    const { books, title, moveBook } = this.props;
 
     return (
       <div className="bookshelf">
@@ -19,7 +20,7 @@ export default class Bookshelf extends Component<IBookshelfProps> {
           <ol className="books-grid">
             {books.map((book) => (
               <li key={book.id}>
-                <Book book={book} />
+                <Book book={book} moveBook={moveBook} />
               </li>
             ))}
           </ol>

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { IBook } from '../data/IBook';
+import { IBook, Shelf } from '../data/IBook';
 
 export interface IBookProps {
   book: IBook;
+  moveBook(book: IBook, shelf: Shelf): void
 }
 
 export default class Book extends Component<IBookProps> {
   render() {
-    const { book } = this.props;
+    const { book, moveBook } = this.props;
 
     return (
       <div className="book" >
@@ -26,7 +27,7 @@ export default class Book extends Component<IBookProps> {
             }}
           />
           <div className="book-shelf-changer">
-            <select>
+            <select value = {book.shelf} onChange={(event: any) => moveBook(book, event.target.value)}>
               <option value="move" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>

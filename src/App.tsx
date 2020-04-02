@@ -8,32 +8,23 @@ import { IBook, Shelf } from './data/IBook'
 
 export interface IAppState {
   shelvedBooks: IBook[];
-  readBooks: IBook[];
-  wantToReadBooks: IBook[];
-  currentlyReadingBooks: IBook[];
   searchedBooks: IBook[];
 }
 
 export default class App extends React.Component<any, IAppState> {
   state: IAppState = {
     shelvedBooks: [],
-    readBooks: [],
-    wantToReadBooks: [],
-    currentlyReadingBooks: [],
     searchedBooks: []
   }
 
   //semi-colons aren't required, but good to do for readability
   async componentDidMount() {
     let shelvedBooks = await BooksAPI.getAll();
-    let currentlyReadingBooks = shelvedBooks.filter(book => book.shelf === Shelf.CurrentlyReading);
-    let wantToReadBooks = shelvedBooks.filter(book => book.shelf === Shelf.WantToRead);
-    let readBooks = shelvedBooks.filter(book => book.shelf === Shelf.Read);
     
     console.log(this);
     this.setState({
-      //shorthand for shelvedBooks: shelvedBooks etc., only works if they're the same name
-      shelvedBooks, readBooks, wantToReadBooks, currentlyReadingBooks
+      //shorthand for shelvedBooks: shelvedBooks
+      shelvedBooks
     });
   }
 
@@ -75,6 +66,17 @@ export default class App extends React.Component<any, IAppState> {
 
   async moveBook(book: IBook, shelf: Shelf) {
     await BooksAPI.update(book, shelf);
+
+    if (shelf === 'none') {
+      this.setState(prevState => ({
+        shelvedBooks: prevState.shelvedBooks.filter(b => b.id !== book.id)
+      }));
+    } else {
+      book.shelf = shelf;
+      this.setState(prevState => ({
+        shelvedBooks: prevState.shelvedBooks.filter(b => b.id !== book.id).concat(book)
+      }));
+    }
   }
 
   render() {
@@ -82,16 +84,16 @@ export default class App extends React.Component<any, IAppState> {
       <div className="app">
         <Route exact path='/' render={() => (
           <BookList
-            currentlyReadingBooks={this.state.currentlyReadingBooks}
-            wantToReadBooks={this.state.wantToReadBooks}
-            readBooks={this.state.readBooks}
+            shelvedBooks={this.state.shelvedBooks}
+            moveBook={this.moveBook.bind(this)}
           />
         )}
         />
-        <Route path='/addbook' render={({ history }) => (
+        <Route path='/search' render={({ history }) => (
           <AddBook
             searchedBooks={this.state.searchedBooks}
             searchBooks={this.searchBooks.bind(this)}
+            moveBook={this.moveBook.bind(this)}
           />
         )} />
       </div>
