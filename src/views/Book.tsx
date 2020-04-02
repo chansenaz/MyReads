@@ -10,6 +10,9 @@ export interface IBookProps {
 export default class Book extends Component<IBookProps> {
   render() {
     const { book, moveBook } = this.props;
+    if (!book.shelf) {
+      book.shelf = Shelf.None;
+    }
 
     return (
       <div className="book" >
