@@ -21,7 +21,6 @@ export default class App extends React.Component<any, IAppState> {
   async componentDidMount() {
     let shelvedBooks = await BooksAPI.getAll();
     
-    console.log(this);
     this.setState({
       //shorthand for shelvedBooks: shelvedBooks
       shelvedBooks
