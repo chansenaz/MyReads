@@ -63,6 +63,12 @@ export default class App extends React.Component<any, IAppState> {
     }
   }
 
+  resertSearch() {
+    this.setState({
+      searchedBooks: []
+    })
+  }
+
   async moveBook(book: IBook, shelf: Shelf) {
     await BooksAPI.update(book, shelf);
 
@@ -90,9 +96,11 @@ export default class App extends React.Component<any, IAppState> {
         />
         <Route path='/search' render={({ history }) => (
           <AddBook
+            shelvedBooks={this.state.shelvedBooks}
             searchedBooks={this.state.searchedBooks}
             searchBooks={this.searchBooks.bind(this)}
             moveBook={this.moveBook.bind(this)}
+            resetSearch={this.resertSearch.bind(this)}
           />
         )} />
       </div>
